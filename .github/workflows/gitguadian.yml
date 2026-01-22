@@ -20,3 +20,5 @@ jobs:
           ggshield secret scan ci
         env:
           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+
+#new file
