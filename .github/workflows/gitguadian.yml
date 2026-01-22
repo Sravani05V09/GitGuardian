@@ -60,4 +60,3 @@ jobs:
       #   run: ggshield secret scan repo . --verbose
       #   env:
       #     GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
-``
