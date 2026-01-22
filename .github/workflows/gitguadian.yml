@@ -1,0 +1,38 @@
+
+name: GitGuardian scan
+
+on:
+  workflow_dispatch:
+
+jobs:
+  scanning:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # good practice for history-aware scans
+
+      - name: Install ggshield
+        run: pip install --upgrade ggshield
+
+      - name: Verify GitGuardian auth
+        run: ggshield api-status
+        env:
+          GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+
+      # CI-aware scan (recommended)
+      - name: GitGuardian CI scan
+        run: ggshield secret scan ci
+        env:
+          GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+
+      # Working tree scan (optional, complements CI)
+      - name: GitGuardian path scan
+        run: ggshield secret scan path .
+        env:
+          GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+
+      - name: Show tracked files
+        run: git ls-files | sed -n '1,200p'
